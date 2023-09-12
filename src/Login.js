@@ -12,21 +12,22 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+        <h2>Welcome to WebChat</h2>
+      <h2>Login with Google Account</h2>
       <div className="form-group">
-        <label>Email:</label>
+        <label>Gmail: </label>
         <input
           type="text"
-          placeholder="Enter your email"
+          placeholder="Enter your Gmail address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <div className="form-group">
-        <label>Password:</label>
+        <label>Password: </label>
         <input
           type="password"
-          placeholder="Enter your password"
+          placeholder="Enter your Gmail password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
