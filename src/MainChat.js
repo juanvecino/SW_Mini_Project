@@ -1,9 +1,11 @@
 // MainChat.js
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import ChatBox from './ChatBox'; // Import the ChatBox component
 import './MainChat.css'; // Import the MainChat.css file
+import UserContext from './UserContext';
 
 const MainChat = () => {
+  const { user } = useContext(UserContext);
   const [activeContact, setActiveContact] = useState(null);
   const [chatHistory, setChatHistory] = useState({});
 
@@ -37,7 +39,7 @@ const MainChat = () => {
   return (
     <div className="main-chat-container">
       <div className="chat-sidebar">
-        <h2>Recent Contacts</h2>
+      <h2>{user ? `Welcome, ${user.name} ${user.surname}` : 'Recent Contacts'}</h2>
         <ul className="contact-list">
           {recentContacts.map((contact) => (
             <li key={contact.id}>
