@@ -1,39 +1,178 @@
-// MainChat.js
-import React, { useState, useContext} from 'react';
-import ChatBox from './ChatBox'; // Import the ChatBox component
-import './MainChat.css'; // Import the MainChat.css file
+import React, { useEffect ,useState, useContext } from 'react';
+import ChatBox from './ChatBox'; 
+import './MainChat.css';
 import UserContext from './UserContext';
+import { getDatabase, ref, child, push, update, get, set, onValue, query, orderByValue, equalTo, orderByChild } from "firebase/database";
+
+function sendMessage(senderId, senderName, roomId, text) {
+  const db = getDatabase();
+  const timestamp = Date.now();
+
+  const messageData = {
+    id_person: senderId,
+    id_room: roomId,
+    time: timestamp,
+    text: text
+  };
+
+  const newMessageKey = push(child(ref(db), 'messages')).key;
+
+  const updates = {};
+  updates['/messages/' + newMessageKey] = messageData;
+  updates['/chats/' + roomId + '/messageHistory/' + newMessageKey] = true;
+
+  return update(ref(db), updates);
+}
+
+function createRoom(roomName, users_ids) {
+  const db = getDatabase();
+
+  // Generate a new ref for the room with a unique ID
+  const roomRef = push(ref(db, 'rooms'));
+
+  // Define the room object
+  const roomData = {
+    id_room: roomRef.key,
+    id_list_people: users_ids,
+    history_message: [],
+    name: roomName
+  };
+
+  // Save the room object to the database
+  set(roomRef, roomData)
+    .then(() => {
+      console.log("Room created successfully!");
+
+      users_ids.forEach(userId => {
+        const userRoomsRef = ref(db, `/persons/${userId}/id_rooms`);
+        // Get current id_rooms list for the user
+        get(userRoomsRef).then(snapshot => {
+          const currentRooms = snapshot.val() || [];
+          const updatedRooms = [...currentRooms, roomRef.key];
+          // Update id_rooms list for the user
+          update(userRoomsRef, updatedRooms);
+        });
+      });
+    })
+    .catch((error) => {
+      console.error("Error creating room:", error);
+    });
+}
+
+//createRoom("",['NW60PUGj8qXFImSgNbovEhM3H112','UXvWEK0gjjey8YQDwCR4vkiqX0T2'])
+
+function getRoomsForPerson(personId) {
+  const db = getDatabase();
+  const roomsRef = ref(db, 'rooms');
+  const roomQuery = query(roomsRef, orderByChild("id_list_people"));
+
+  return new Promise((resolve, reject) => {
+    const rooms = [];
+    onValue(roomQuery, (snapshot) => {
+      snapshot.forEach((roomSnapshot) => {
+        const roomData = roomSnapshot.val();
+        if (roomData.id_list_people && roomData.id_list_people.includes(personId)) {
+          rooms.push({ id: roomData.id_room, name: roomData.name });
+        }
+      });
+      resolve(rooms);
+    }, (error) => {
+      reject(error);
+    });
+  });
+}
+
+function getMessagesForRoom(roomId) {
+  const db = getDatabase();
+  const messagesRef = ref(db, 'messages');
+  const messagesQuery = query(messagesRef, orderByChild("id_room"), equalTo(roomId));
+
+  return new Promise((resolve, reject) => {
+    const messages = [];
+    onValue(messagesQuery, (snapshot) => {
+      snapshot.forEach((messageSnapshot) => {
+        const messageData = messageSnapshot.val();
+        if (messageData.id_room === roomId) {
+          messages.push(messageData);
+        }
+      });
+      resolve(messages);
+    }, (error) => {
+      reject(error);
+    });
+  });
+}
+
+
 
 const MainChat = () => {
   const { user } = useContext(UserContext);
+
   const [activeContact, setActiveContact] = useState(null);
   const [chatHistory, setChatHistory] = useState({});
+  const [recentContacts, setRecentContacts] = useState([]);  // Initialize as empty array
 
-  // Define recentContacts as an array of contact objects
-  const [recentContacts, setRecentContacts] = useState([
-    { id: 1, name: 'User 1' },
-    { id: 2, name: 'User 2' },
-    // Add more contacts as needed
-  ]);
+  useEffect(() => {
+    if(user && user.id_person) {
+      getRoomsForPerson(user.id_person)
+        .then(rooms => {
+          setRecentContacts(rooms);
+        })
+        .catch(error => {
+          console.error("Error fetching rooms for person:", error);
+        });
+    }
+  }, [user]);
+
+  const db = getDatabase();
+  const userRef = ref(db, `persons/${user.id_person}`);
+
+  get(userRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  }).catch((error) => {
+    console.error(error);
+  });
+
 
   const handleStartChat = (contact) => {
     setActiveContact(contact);
-    // Initialize chat history for the selected contact
-    if (!chatHistory[contact.id]) {
-      setChatHistory({
-        ...chatHistory,
-        [contact.id]: [],
+    getMessagesForRoom(contact.id)
+      .then(messages => {
+        setChatHistory({
+          ...chatHistory,
+          [contact.id]: messages,
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching messages for room:", error);
       });
-    }
   };
 
-  const handleSendMessage = (message, timestamp) => {
-    const currentChatHistory = chatHistory[activeContact.id];
-    const updatedChatHistory = [...currentChatHistory, { text: message, user: 'You', timestamp }];
-    setChatHistory({
-      ...chatHistory,
-      [activeContact.id]: updatedChatHistory,
-    });
+  const handleSendMessage = (messageText) => {
+    if (user && activeContact) {
+
+      console.log("User ID:", user.id_person);
+      console.log("User Name:", user.name);
+      console.log("Active Contact ID:", activeContact.id);
+      console.log("Message:", messageText);
+
+      sendMessage(user.id_person, user.name, activeContact.id, messageText)
+        .then(() => {
+          const currentChatHistory = chatHistory[activeContact.id];
+          const updatedChatHistory = [...currentChatHistory, { text: messageText, user: user.name }];
+          setChatHistory({
+            ...chatHistory,
+            [activeContact.id]: updatedChatHistory,
+          });
+        })
+        .catch(error => {
+          console.error("Error sending message: ", error);
+        });
+    }
   };
 
   return (
@@ -52,7 +191,7 @@ const MainChat = () => {
         {activeContact ? (
           <ChatBox
             activeContact={activeContact}
-            onSendMessage={handleSendMessage}
+            onSendMessage={(messageText) => handleSendMessage(messageText)}
             messages={chatHistory[activeContact.id] || []}
           />
         ) : (

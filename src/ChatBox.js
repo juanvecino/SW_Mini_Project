@@ -7,8 +7,7 @@ const ChatBox = ({ activeContact, onSendMessage, messages }) => {
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
-      const timestamp = new Date().toLocaleTimeString(); // Get the current time
-      onSendMessage(newMessage, timestamp);
+      onSendMessage(newMessage);
       setNewMessage('');
     }
   };
