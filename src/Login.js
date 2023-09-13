@@ -3,6 +3,7 @@ import GoogleButton from 'react-google-button';
 import { auth, provider } from './components/firebase';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 
 const Login = () => {
@@ -12,6 +13,7 @@ const Login = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         // Redirect the user to the chat page after successful sign-in
+        const user = result.user;
         navigate('/chat');
       })
       .catch((error) => {

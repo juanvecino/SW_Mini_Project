@@ -1,57 +1,52 @@
+// MainChat.js
 import React, { useState, useEffect } from 'react';
+import ChatBox from './ChatBox'; // Import the ChatBox component
+import './MainChat.css'; // Import the MainChat.css file
+
 
 const MainChat = () => {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [activeChat, setActiveChat] = useState(null);
 
-  // Simulated list of chat messages (replace with your backend or storage solution)
-  const initialMessages = [
-    { id: 1, text: 'Hello, welcome to the chat!', user: 'Admin' },
-  ];
+  // Define recentContacts as an array of contact objects
+  const [recentContacts, setRecentContacts] = useState([
+    { id: 1, name: 'User 1' },
+    { id: 2, name: 'User 2' },
+    // Add more contacts as needed
+  ]);
 
-  useEffect(() => {
-    // Load initial chat messages (fetch from your backend or storage)
-    setMessages(initialMessages);
-  }, []);
+  const handleStartChat = (contact) => {
+    setActiveChat(contact);
+  };
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() !== '') {
-      // Simulated user ID (replace with user authentication)
-      const userId = 'user123';
-
-      // Create a new message object
-      const message = {
-        id: messages.length + 1,
-        text: newMessage,
-        user: userId,
-      };
-
-      // Update the messages state with the new message
-      setMessages([...messages, message]);
-
-      // Clear the input field
-      setNewMessage('');
-    }
+  const handleSendMessage = (message) => {
+    // ... Your message sending logic
   };
 
   return (
     <div className="main-chat-container">
-      <h2>Main Chat</h2>
-      <div className="chat-messages">
-        {messages.map((message) => (
-          <div key={message.id} className={`message ${message.user === 'Admin' ? 'admin' : ''}`}>
-            <p>{message.text}</p>
-          </div>
-        ))}
+      <div className="chat-sidebar">
+        <h2>Recent Contacts</h2>
+        <ul className="contact-list">
+          {recentContacts.map((contact) => (
+            <li key={contact.id}>
+              <button onClick={() => handleStartChat(contact)}>{contact.name}</button>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div className="message-input">
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Send</button>
+      <div className="chat-panel">
+        {activeChat ? (
+          <ChatBox
+            activeContact={activeChat}
+            onSendMessage={handleSendMessage}
+            messages={messages}
+          />
+        ) : (
+          <div className="welcome-message">
+            <p>Select a contact to start a chat.</p>
+          </div>
+        )}
       </div>
     </div>
   );

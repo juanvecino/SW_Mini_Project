@@ -1,41 +1,63 @@
+/* Login Container */
 .login-container {
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #ffffff;
-  }
-  
-  .form-group {
-    margin-bottom: 10px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .login-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #ffffff;
-    cursor: pointer;
-  }
-  
-  .login-button:hover {
-    background-color: #0056b3;
-  }
-  
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background-color: #f0f0f0; /* Background color for the login container */
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 10px;
+}
+
+/* Label Style */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Input Style */
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Google Sign-in Button Style */
+.google-signin {
+  text-align: center; /* Center-align the Google sign-in button */
+  margin-top: 20px; /* Add some spacing between input and button */
+}
+
+/* Style for Google Sign-in button (Use your own styling) */
+.google-signin > button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Button background color */
+  color: #fff; /* Button text color */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.google-signin > button:hover {
+  background-color: #0056b3; /* Hover color for the sign-in button */
+}
+
+/* Centered Content */
+.centered-content {
+  text-align: center;
+}
+
+/* Welcome Text */
+h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}

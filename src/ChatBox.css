@@ -1,0 +1,53 @@
+/* ChatBox.css */
+.chat-box {
+    background-color: #f8f9fa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .message-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .message-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .message-list::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 4px;
+  }
+  
+  .message-input {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .message-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .message-input button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .message-input button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* You can add more styling as needed */
+  

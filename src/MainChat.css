@@ -1,0 +1,51 @@
+/* MainChat.css */
+.main-chat-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .chat-sidebar {
+    flex: 1;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+  }
+  
+  .contact-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .contact-list li {
+    margin-bottom: 10px;
+  }
+  
+  .contact-list button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .contact-list button:hover {
+    color: #007bff;
+  }
+  
+  .chat-panel {
+    flex: 2;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+  }
+  
+  .welcome-message {
+    text-align: center;
+    font-size: 20px;
+  }
+  
+  /* You can add more styling as needed */
+  
