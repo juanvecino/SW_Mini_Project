@@ -1,4 +1,3 @@
-// ChatBox.js
 import React, { useState } from 'react';
 import './ChatBox.css'; // Import the ChatBox.css file
 
@@ -26,7 +25,7 @@ const ChatBox = ({ activeContact, onSendMessage, messages }) => {
           >
             <p>
               <span className="message-user">{message.user}</span>
-              <span className="message-timestamp">{message.timestamp}</span>
+              <span className="message-timestamp"> {message.timestamp}</span> {/* Add a space before timestamp */}
             </p>
             <p>{message.text}</p>
           </div>

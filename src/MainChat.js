@@ -1,11 +1,10 @@
-// MainChat.js
-import React, { useState, useContext} from 'react';
+import React, { useState } from 'react';
 import ChatBox from './ChatBox'; // Import the ChatBox component
 import './MainChat.css'; // Import the MainChat.css file
-import UserContext from './UserContext';
+import { useParams } from 'react-router-dom';
 
 const MainChat = () => {
-  const { user } = useContext(UserContext);
+    const { userName } = useParams();
   const [activeContact, setActiveContact] = useState(null);
   const [chatHistory, setChatHistory] = useState({});
 
@@ -29,7 +28,10 @@ const MainChat = () => {
 
   const handleSendMessage = (message, timestamp) => {
     const currentChatHistory = chatHistory[activeContact.id];
-    const updatedChatHistory = [...currentChatHistory, { text: message, user: 'You', timestamp }];
+    const updatedChatHistory = [
+      ...currentChatHistory,
+      { text: message, user: userName, timestamp }, // Use userName instead of 'You'
+    ];
     setChatHistory({
       ...chatHistory,
       [activeContact.id]: updatedChatHistory,
@@ -39,7 +41,7 @@ const MainChat = () => {
   return (
     <div className="main-chat-container">
       <div className="chat-sidebar">
-      <h2>{user ? `Welcome, ${user.name} ${user.surname}` : 'Recent Contacts'}</h2>
+        <h2>Recent Contacts</h2>
         <ul className="contact-list">
           {recentContacts.map((contact) => (
             <li key={contact.id}>
