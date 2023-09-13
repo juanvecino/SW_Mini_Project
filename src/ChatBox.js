@@ -1,14 +1,14 @@
 // ChatBox.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './ChatBox.css'; // Import the ChatBox.css file
-
 
 const ChatBox = ({ activeContact, onSendMessage, messages }) => {
   const [newMessage, setNewMessage] = useState('');
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
-      onSendMessage(newMessage);
+      const timestamp = new Date().toLocaleTimeString(); // Get the current time
+      onSendMessage(newMessage, timestamp);
       setNewMessage('');
     }
   };
@@ -21,9 +21,13 @@ const ChatBox = ({ activeContact, onSendMessage, messages }) => {
       <div className="chat-messages">
         {messages.map((message) => (
           <div
-            key={message.id}
+            key={message.timestamp}
             className={`message ${message.user === 'Admin' ? 'admin' : ''}`}
           >
+            <p>
+              <span className="message-user">{message.user}</span>
+              <span className="message-timestamp">{message.timestamp}</span>
+            </p>
             <p>{message.text}</p>
           </div>
         ))}

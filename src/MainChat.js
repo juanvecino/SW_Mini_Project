@@ -1,12 +1,11 @@
 // MainChat.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ChatBox from './ChatBox'; // Import the ChatBox component
 import './MainChat.css'; // Import the MainChat.css file
 
-
 const MainChat = () => {
-  const [messages, setMessages] = useState([]);
-  const [activeChat, setActiveChat] = useState(null);
+  const [activeContact, setActiveContact] = useState(null);
+  const [chatHistory, setChatHistory] = useState({});
 
   // Define recentContacts as an array of contact objects
   const [recentContacts, setRecentContacts] = useState([
@@ -16,11 +15,23 @@ const MainChat = () => {
   ]);
 
   const handleStartChat = (contact) => {
-    setActiveChat(contact);
+    setActiveContact(contact);
+    // Initialize chat history for the selected contact
+    if (!chatHistory[contact.id]) {
+      setChatHistory({
+        ...chatHistory,
+        [contact.id]: [],
+      });
+    }
   };
 
-  const handleSendMessage = (message) => {
-    // ... Your message sending logic
+  const handleSendMessage = (message, timestamp) => {
+    const currentChatHistory = chatHistory[activeContact.id];
+    const updatedChatHistory = [...currentChatHistory, { text: message, user: 'You', timestamp }];
+    setChatHistory({
+      ...chatHistory,
+      [activeContact.id]: updatedChatHistory,
+    });
   };
 
   return (
@@ -36,11 +47,11 @@ const MainChat = () => {
         </ul>
       </div>
       <div className="chat-panel">
-        {activeChat ? (
+        {activeContact ? (
           <ChatBox
-            activeContact={activeChat}
+            activeContact={activeContact}
             onSendMessage={handleSendMessage}
-            messages={messages}
+            messages={chatHistory[activeContact.id] || []}
           />
         ) : (
           <div className="welcome-message">

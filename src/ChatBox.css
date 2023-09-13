@@ -1,6 +1,6 @@
 /* ChatBox.css */
 .chat-box {
-    background-color: #f8f9fa;
+    background-color: #fff;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -48,6 +48,3 @@
   .message-input button:hover {
     background-color: #0056b3;
   }
-  
-  /* You can add more styling as needed */
-  
