@@ -3,6 +3,7 @@ import ChatBox from './ChatBox';
 import './MainChat.css';
 import UserContext from './UserContext';
 import { getDatabase, ref, child, push, update, get, set, onValue, query, orderByValue, equalTo, orderByChild } from "firebase/database";
+import SearchBar from './SearchBar'; // Import the SearchBar component
 
 function sendMessage(senderId, senderName, roomId, text) {
   const db = getDatabase();
@@ -137,6 +138,28 @@ const MainChat = () => {
     console.error(error);
   });
 
+  const handleSearchUser = (searchText) => {
+    if (user && user.id_person) {
+      // You can implement the logic to search for users and start a chat here
+      // For example, you can create a room with the searched user if they exist
+      // Replace the example user ID with the actual user ID
+      const searchedUserId = 'USER_ID_TO_BE_REPLACED';
+      createRoom('', [user.id_person, searchedUserId])
+        .then(() => {
+          // Reload the recent contacts after creating the room
+          getRoomsForPerson(user.id_person)
+            .then((rooms) => {
+              setRecentContacts(rooms);
+            })
+            .catch((error) => {
+              console.error("Error fetching rooms for person:", error);
+            });
+        })
+        .catch((error) => {
+          console.error("Error creating room:", error);
+        });
+    }
+  };
 
   const handleStartChat = (contact) => {
     setActiveContact(contact);
@@ -179,6 +202,7 @@ const MainChat = () => {
     <div className="main-chat-container">
       <div className="chat-sidebar">
       <h2>{user ? `Welcome, ${user.name} ${user.surname}` : 'Recent Contacts'}</h2>
+        <SearchBar onSearch={handleSearchUser} />
         <ul className="contact-list">
           {recentContacts.map((contact) => (
             <li key={contact.id}>
