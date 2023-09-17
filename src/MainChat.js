@@ -112,6 +112,7 @@ const MainChat = () => {
   const [activeContact, setActiveContact] = useState(null);
   const [chatHistory, setChatHistory] = useState({});
   const [recentContacts, setRecentContacts] = useState([]);  // Initialize as empty array
+  const [filteredContacts, setFilteredContacts] = useState([]);
 
   useEffect(() => {
     if(user && user.id_person) {
@@ -143,6 +144,10 @@ const MainChat = () => {
       // You can implement the logic to search for users and start a chat here
       // For example, you can create a room with the searched user if they exist
       // Replace the example user ID with the actual user ID
+      const filtered = recentContacts.filter((contact) =>
+      contact.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredContacts(filtered);
       const searchedUserId = 'USER_ID_TO_BE_REPLACED';
       createRoom('', [user.id_person, searchedUserId])
         .then(() => {
@@ -204,7 +209,7 @@ const MainChat = () => {
       <h2>{user ? `Welcome, ${user.name} ${user.surname}` : 'Recent Contacts'}</h2>
         <SearchBar onSearch={handleSearchUser} />
         <ul className="contact-list">
-          {recentContacts.map((contact) => (
+        {filteredContacts.map((contact) => (
             <li key={contact.id}>
               <button onClick={() => handleStartChat(contact)}>{contact.name}</button>
             </li>
