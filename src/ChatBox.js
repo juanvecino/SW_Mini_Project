@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './ChatBox.css'; // Import the ChatBox.css file
 
-const ChatBox = ({ activeContact, onSendMessage, messages }) => {
+const ChatBox = ({ activeContact, onSendMessage, messages}) => {
   const [newMessage, setNewMessage] = useState('');
 
   const handleSendMessage = () => {
@@ -24,8 +24,10 @@ const ChatBox = ({ activeContact, onSendMessage, messages }) => {
             className={`message ${message.user === 'Admin' ? 'admin' : ''}`}
           >
             <p>
-              <span className="message-user">{message.user}</span>
-              <span className="message-timestamp">{message.timestamp}</span>
+              <span className="message-user">{message.user}
+              </span>
+              <span className="message-timestamp">{message.timestamp}
+              </span>
             </p>
             <p>{message.text}</p>
           </div>

@@ -5,6 +5,23 @@ import UserContext from './UserContext';
 import { getDatabase, ref, child, push, update, get, set, onValue, query, orderByValue, equalTo, orderByChild } from "firebase/database";
 import SearchBar from './SearchBar'; // Import the SearchBar component
 
+function getAllUsers() {
+  const db = getDatabase();
+  const usersRef = ref(db, 'persons'); // Adjust the reference path to your user data
+  return new Promise((resolve, reject) => {
+    const users = [];
+    onValue(usersRef, (snapshot) => {
+      snapshot.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        users.push({ id: userSnapshot.key, name: userData.name, surname: userData.surname });
+      });
+      resolve(users);
+    }, (error) => {
+      reject(error);
+    });
+  });
+}
+
 function sendMessage(senderId, senderName, roomId, text) {
   const db = getDatabase();
   const timestamp = Date.now();
@@ -111,20 +128,32 @@ const MainChat = () => {
 
   const [activeContact, setActiveContact] = useState(null);
   const [chatHistory, setChatHistory] = useState({});
-  const [recentContacts, setRecentContacts] = useState([]);  // Initialize as empty array
+  const [recentContacts, setRecentContacts] = useState([]); // Initialize as empty array
   const [filteredContacts, setFilteredContacts] = useState([]);
+  const [allUsers, setAllUsers] = useState([]); // Store all registered users
 
+  // Fetch all registered users when the component mounts
   useEffect(() => {
-    if(user && user.id_person) {
+    if (user && user.id_person) {
       getRoomsForPerson(user.id_person)
-        .then(rooms => {
+        .then((rooms) => {
           setRecentContacts(rooms);
         })
-        .catch(error => {
-          console.error("Error fetching rooms for person:", error);
+        .catch((error) => {
+          console.error('Error fetching rooms for person:', error);
+        });
+
+      // Fetch all registered users
+      getAllUsers()
+        .then((users) => {
+          setAllUsers(users);
+        })
+        .catch((error) => {
+          console.error('Error fetching all users:', error);
         });
     }
   }, [user]);
+
 
   const db = getDatabase();
   const userRef = ref(db, `persons/${user.id_person}`);
@@ -206,12 +235,12 @@ const MainChat = () => {
   return (
     <div className="main-chat-container">
       <div className="chat-sidebar">
-      <h2>{user ? `Welcome, ${user.name} ${user.surname}` : 'Recent Contacts'}</h2>
+        <h2>{user ? `Welcome, ${user.name} ${user.surname}` : 'Recent Contacts'}</h2>
         <SearchBar onSearch={handleSearchUser} />
         <ul className="contact-list">
-        {filteredContacts.map((contact) => (
-            <li key={contact.id}>
-              <button onClick={() => handleStartChat(contact)}>{contact.name}</button>
+          {allUsers.map((user) => (
+            <li key={user.id}>
+              <button onClick={() => handleStartChat(user)}>{`${user.name} ${user.surname}`}</button>
             </li>
           ))}
         </ul>
