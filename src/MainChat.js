@@ -46,6 +46,23 @@ function getContactsForPerson(personId) {
   });
 }
 
+function getAllPersons() {
+  const db = getDatabase();
+  const personsRef = ref(db, `persons`);
+
+  return get(personsRef)
+    .then(snapshot => {
+      if (snapshot.exists()) {
+        return Object.values(snapshot.val());
+      } else {
+        return [];
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching all persons:", error);
+      throw error;
+    });
+}
 
 
 
@@ -142,20 +159,26 @@ const MainChat = () => {
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();
     setNewContactId(query);
-
+  
     if(query.length === 0) {
       setIsDropdownVisible(false);
       return;
     }
   
-    // Simplificando: buscamos en los contactos que ya hemos cargado.
-    // Idealmente, esta búsqueda se haría en el servidor.
-    const filteredContacts = contacts.filter(contact =>
-      `${contact.name} ${contact.surname}`.toLowerCase().includes(query) || contact.email.toLowerCase().includes(query)
-    );
-  
-    setSearchResults(filteredContacts);
-    setIsDropdownVisible(true);
+    // Fetch all persons from the database
+    getAllPersons().then(allPersons => {
+      const filteredContacts = allPersons.filter(contact => {
+        if (contact.email) {
+          return `${contact.name} ${contact.surname}`.toLowerCase().includes(query) || contact.email.toLowerCase().includes(query);
+        } else {
+          return `${contact.name} ${contact.surname}`.toLowerCase().includes(query);
+        }
+      });
+      setSearchResults(filteredContacts);
+      setIsDropdownVisible(true);
+    }).catch(error => {
+      console.error("Error fetching all persons:", error);
+    });
   };
   
 
@@ -256,7 +279,7 @@ const MainChat = () => {
             <ul className="search-dropdown">
               {searchResults.map((contact, index) => (
                 <li key={index} onClick={() => {
-                  handleAddContactByObject(contact);
+                  handleAddContactByObject(contact); // This will add the contact
                   setNewContactId('');
                   setIsDropdownVisible(false);
                 }}>
