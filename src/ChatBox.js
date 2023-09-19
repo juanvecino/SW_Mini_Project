@@ -40,7 +40,7 @@ const ChatBox = ({ activeContact, onSendMessage, messages }) => {
           >
             <p>
               <span className="message-user">{message.user}</span>
-              <span className="message-timestamp">{formatDate(message.time)}</span>
+              <span className="message-timestamp"> {formatDate(message.time)}</span>
             </p>
             <p>{message.text}</p>
           </div>

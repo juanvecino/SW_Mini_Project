@@ -156,6 +156,41 @@ const MainChat = () => {
     }
   }, [activeContact,user]);
 
+  useEffect(() => {
+    const db = getDatabase();
+    const messagesRef = ref(db, 'messages');
+  
+    // Observer para escuchar nuevos mensajes
+    const unsubscribe = onValue(messagesRef, snapshot => {
+      let newContactFound = false;
+  
+      snapshot.forEach(messageSnapshot => {
+        const messageData = messageSnapshot.val();
+  
+        // Si eres el receptor y el remitente no está en tu lista de contactos
+        if (messageData.receiverId === user.id_person && !contacts.some(contact => contact.id_person === messageData.senderId)) {
+          newContactFound = true;
+        }
+      });
+  
+      // Si se encontró un nuevo contacto, actualiza la lista de contactos
+      if (newContactFound) {
+        getContactsForPerson(user.id_person)
+          .then(ids => {
+            setContacts(ids);
+          })
+          .catch(error => {
+            console.error("Error fetching contacts for person:", error);
+          });
+      }
+    });
+  
+    return () => {
+      // Limpia el listener al desmontar el componente
+      unsubscribe();
+    };
+  }, [user, contacts]);  
+
   const handleSearchChange = (e) => {
     const query = e.target.value.toLowerCase();
     setNewContactId(query);
