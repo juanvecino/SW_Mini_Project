@@ -1,38 +1,50 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import GoogleButton from 'react-google-button';
 import { auth, provider } from './components/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import UserContext from './UserContext';
-import { getDatabase, ref, update } from "firebase/database";
+import { getDatabase, ref, update, get } from "firebase/database";
 
 const Login = () => {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  function signUp() {
+  function signInOrSignUp() {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
-
-      const userData = {
-        id_person: user.uid,
-        name: user.displayName.split(' ')[0],
-        surname: user.displayName.split(' ')[1] || "",
-        id_rooms: ['-NeEVC8fW1EI7ccM16MQ'],
-        email: user.email,
-      };
-
-      setUser(userData);
-      
-      // Save user to Firebase
-      update(ref(getDatabase(), `/persons/${user.uid}`), userData);
-
-      navigate('/chat');
+        
+        // Check if user already exists in Firebase
+        const userRef = ref(getDatabase(), `/persons/${user.uid}`);
+        get(userRef)
+          .then(snapshot => {
+            if (snapshot.exists()) {
+              // If user already exists, just set the user data in context
+              setUser(snapshot.val());
+              navigate('/chat');
+            } else {
+              // If user doesn't exist, create new user data and update Firebase
+              const userData = {
+                id_person: user.uid,
+                name: user.displayName.split(' ')[0],
+                surname: user.displayName.split(' ')[1] || "",
+                id_rooms: [],
+                email: user.email,
+              };
+              
+              setUser(userData);
+              
+              // Save new user to Firebase
+              update(userRef, userData);
+              navigate('/chat');
+            }
+          });
       })
       .catch((error) => {
         // Handle Errors here.
+        console.error("Login/Signup error:", error);
       });
   }
 
@@ -41,7 +53,7 @@ const Login = () => {
       <div className="centered-content">
         <h2>Welcome to WebChat</h2>
         <div className="google-signin">
-          <GoogleButton onClick={signUp} />
+          <GoogleButton onClick={signInOrSignUp} />
         </div>
       </div>
     </div>

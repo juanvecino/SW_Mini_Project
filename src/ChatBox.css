@@ -48,3 +48,18 @@
   .message-input button:hover {
     background-color: #0056b3;
   }
+  .message.self {
+    text-align: right;
+    /* otros estilos que desees agregar para los mensajes del usuario */
+  }
+  
+  .message.contact {
+    text-align: left;
+    /* otros estilos que desees agregar para los mensajes del contacto */
+  }
+
+  .chat-messages {
+    max-height: 100%; /* Ajusta este valor según lo necesites */
+    overflow-y: auto; /* Habilitar el desplazamiento vertical */
+  }
+  
