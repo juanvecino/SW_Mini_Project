@@ -1,10 +1,13 @@
-# Getting Started with Create React App
+# WebChat
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Firebase and Native-based web chat application that allows registered users to chat with each other in real time.
+Project Partners: Bora Bulut and Juan Vecino
+The work was split equally. Bora worked mostly on front-end, and Juan mostly worked on back-end.
 
-## Available Scripts
+### Login Page
 
-In the project directory, you can run:
+The login page has a simple UI that greets the user with a welcome text at top center. Right below it, there is a Google authentication button that allows the user sign in with their Google account. This is the only sign in method.
+![Screenshot 2023-09-20 at 19 40 48](https://github.com/juanvecino/SW_Mini_Project/assets/91101241/7724ddfb-e63b-4d83-a877-0173e67c88ac)
 
 ### `npm start`
 
