@@ -4,6 +4,10 @@ Firebase and Native-based web chat application that allows registered users to c
 Project Partners: Bora Bulut and Juan Vecino
 The work was split equally. Bora worked mostly on front-end, and Juan mostly worked on back-end.
 
+### Demo Video
+
+Click the link to watch the app in action: https://drive.google.com/file/d/16yi_vNt7pEYtUe4EwQp6X-XHKcI0iYij/view?usp=share_link
+
 ### Login Page
 
 The login page has a simple UI that greets the user with a welcome text at top center. Right below it, there is a Google authentication button that allows the user sign in with their Google account. This is the only sign in method.
