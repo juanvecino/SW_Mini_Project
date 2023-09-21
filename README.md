@@ -9,65 +9,13 @@ The work was split equally. Bora worked mostly on front-end, and Juan mostly wor
 The login page has a simple UI that greets the user with a welcome text at top center. Right below it, there is a Google authentication button that allows the user sign in with their Google account. This is the only sign in method.
 ![Screenshot 2023-09-20 at 19 40 48](https://github.com/juanvecino/SW_Mini_Project/assets/91101241/7724ddfb-e63b-4d83-a877-0173e67c88ac)
 
-### `npm start`
+### Main Chat Page
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Once the user is logged in, they are taken to the main chat page where there is a search bar on the upper left hand side, which the user can use to search for other users by their name, last name, or email. The left column is dedicated to active chats. The user can conveniently pick from the list to chat with the person of interest.
+![Screenshot 2023-09-20 at 20 01 15](https://github.com/juanvecino/SW_Mini_Project/assets/91101241/c306c9ef-cd52-4d67-a652-302f11ef6c5c)
+![Screenshot 2023-09-20 at 20 01 49](https://github.com/juanvecino/SW_Mini_Project/assets/91101241/a4a5cd99-e43f-4676-a760-bf7aec368170)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Chat Box
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+After the users pick the person they want to start conversation with, the chat section on the right side gets activated and shows the name of the person that's being chat with. When the user types their message and presses send, the text is displayed on the right with the name and last name of the sender, date, and time right above it. Received messages are shown in the same format but on the left side.
+![Screenshot 2023-09-20 at 20 02 11](https://github.com/juanvecino/SW_Mini_Project/assets/91101241/b63fed1a-aec8-4f3d-b71e-d90fa94f06b8)
